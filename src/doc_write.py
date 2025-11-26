@@ -9,7 +9,7 @@ def add_markdown_paragraph(paragraph, text):
     Process the given text for markdown bold markers (**...**) and add runs to the paragraph.
     """
     # Split the text on patterns that are enclosed with ** (capturing the delimiters)
-    parts = re.split(r'(\*\*.*?\*\*)', text)
+    parts = re.split(r"(\*\*.*?\*\*)", text)
     for part in parts:
         # If part is enclosed in **, add it as a bold run.
         if part.startswith("**") and part.endswith("**"):
@@ -17,6 +17,7 @@ def add_markdown_paragraph(paragraph, text):
             run.bold = True
         else:
             paragraph.add_run(part)
+
 
 def markdown_to_docx(document: Document, markdown_text: str):
     """
@@ -35,12 +36,13 @@ def markdown_to_docx(document: Document, markdown_text: str):
         elif stripped.startswith("# "):
             document.add_heading(stripped[2:].strip(), level=1)
         elif stripped.startswith("- "):
-            p = document.add_paragraph(style='List Bullet')
+            p = document.add_paragraph(style="List Bullet")
             add_markdown_paragraph(p, stripped[2:].strip())
         else:
             # For normal text, add a paragraph and process for bold markers.
             p = document.add_paragraph()
             add_markdown_paragraph(p, stripped)
+
 
 def write_docx(filename: str, content: str, use_markdown: bool = False):
     """
@@ -48,11 +50,11 @@ def write_docx(filename: str, content: str, use_markdown: bool = False):
     """
     doc = Document()
     # Optional: set default font size
-    style = doc.styles['Normal']
+    style = doc.styles["Normal"]
     font = style.font
-    font.name = 'Calibri'
+    font.name = "Calibri"
     font.size = Pt(11)
-    
+
     if use_markdown:
         markdown_to_docx(doc, content)
     else:
