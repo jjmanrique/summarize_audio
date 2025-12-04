@@ -9,17 +9,6 @@ from src.audio_handler import align, diarize, transcribe
 from src.doc_write import write_docx
 from src.prompts import get_summarization_prompt
 
-if os.environ.get("LD_LIBRARY_PATH") is None:
-    import nvidia.cublas.lib
-    import nvidia.cudnn.lib
-
-    os.environ["LD_LIBRARY_PATH"] = (
-        os.path.dirname(nvidia.cublas.lib.__file__)
-        + ":"
-        + os.path.dirname(nvidia.cudnn.lib.__file__)
-    )
-    print("loaded nvida env vars")
-
 
 logging.basicConfig(
     format="%(asctime)s %(message)s", datefmt="%m/%d/%Y %I:%M:%S %p", level=logging.INFO
