@@ -13,7 +13,7 @@ hf_token = os.environ["HF_TOKEN"]
 def transcribe(audio_path, device, compute_type, batch_size):
     # load model
     logging.info("Loading Transcription Model...")
-    model = whisperx.load_model("large-v3", device, compute_type=compute_type)
+    model = whisperx.load_model("large-v3", device, compute_type=compute_type, language="pt")
 
     audio = whisperx.load_audio(audio_path)
     logging.info("transcribing...")

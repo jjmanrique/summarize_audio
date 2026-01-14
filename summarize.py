@@ -2,7 +2,7 @@ import argparse
 import logging
 import os
 
-import google.generativeai as genai
+from google.genai import Client
 import torch
 
 from src.audio_handler import align, diarize, transcribe
@@ -15,7 +15,7 @@ logging.basicConfig(
 )
 
 
-genai.configure(api_key=os.environ["GEMINI_KEY"])
+client = Client(api_key=os.environ["GEMINI_KEY"])
 
 device = "cuda"
 batch_size = 16  # reduce if low on GPU mem
@@ -23,9 +23,6 @@ compute_type = "float16"  # change to "int8" if low on GPU mem (may reduce accur
 
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
-
-
-llm = genai.GenerativeModel("gemini-2.0-flash")
 
 
 def write_transcription(result):
@@ -54,7 +51,7 @@ def summarize(audio_path, output_dir="./"):
     write_docx(transcription_path, output_text, use_markdown=False)
 
     prompt = get_summarization_prompt(output_text)
-    response = llm.generate_content(prompt)
+    response = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
 
     print("writing summary...")
     write_docx(summary_path, response.text, use_markdown=True)
